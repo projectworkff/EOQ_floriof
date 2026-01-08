@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Inventory Optimizer Pro</title>
+    
+    <style>
+        :root {
+            --primary: #2563eb;
+            --bg: #f1f5f9;
+            --card: #ffffff;
+            --text: #1e293b;
+        }
+
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            margin: 0; 
+            padding: 10px;
+        }
+
+        .app-container { 
+            max-width: 500px; 
+            margin: auto; 
+            background: var(--card); 
+            padding: 20px; 
+            border-radius: 15px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        /* Selettore Lingua in alto a destra */
+        .lang-selector {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+
+        .lang-selector select {
+            padding: 5px;
+            font-size: 0.8rem;
+            border-radius: 5px;
+            border: 1px solid #cbd5e1;
+            background: white;
+            cursor: pointer;
+        }
+
+        header { text-align: center; margin-bottom: 25px; margin-top: 10px; }
+        header h1 { font-size: 1.4rem; margin: 0; color: var(--primary); }
+
+        .input-group { margin-bottom: 12px; }
+        label { display: block; font-size: 0.75rem; font-weight: 600; margin-bottom: 4px; opacity: 0.8; }
+        
+        input, select { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid #cbd5e1; 
+            border-radius: 8px; 
+            box-sizing: border-box; 
+            font-size: 16px;
+        }
+
+        button { 
+            width: 100%; 
+            padding: 15px; 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            border-radius: 10px; 
+            font-size: 1rem; 
+            font-weight: bold; 
+            cursor: pointer;
+            margin-top: 10px;
+            transition: opacity 0.2s;
+        }
+
+        button:active { opacity: 0.8; }
+
+        .results-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 10px; 
+            margin-top: 25px; 
+        }
+
+        .card { 
+            background: #eff6ff; 
+            padding: 12px; 
+            border-radius: 10px; 
+            text-align: center;
+            border: 1px solid #dbeafe;
+        }
+
+        .card span { display: block; font-size: 1.1rem; font-weight: bold; color: var(--primary); }
+        .card label { font-size: 0.65rem; text-transform: uppercase; margin-bottom: 5px; }
+
+        .table-wrapper { overflow-x: auto; margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+        th, td { padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: center; }
+        th { background: #f8fafc; font-weight: 600; }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="lang-selector">
+        <select id="languagePicker" onchange="changeLanguage()">
+            <option value="it">🇮🇹 IT</option>
+            <option value="en">🇺🇸 EN</option>
+            <option value="es">🇪🇸 ES</option>
+        </select>
+    </div>
+
+    <header>
+        <h1 data-key="title">Analizzatore Scorte EOQ/ROP</h1>
+        <p data-key="subtitle" style="font-size: 0.85rem; opacity: 0.7;">Calcolo EOQ & ROP</p>
+    </header>
+
+    <div class="input-section">
+        <div class="input-group">
+            <label data-key="labelDemand">Domanda Annua (D)</label>
+            <input type="number" id="D" value="12000">
+        </div>
+        <div class="input-group" style="display: flex; gap: 10px;">
+            <div style="flex: 1;">
+                <label data-key="labelSetup">Costo Setup (S)</label>
+                <input type="number" id="S" value="50">
+            </div>
+            <div style="flex: 1;">
+                <label data-key="labelHolding">Costo Mant. (H)</label>
+                <input type="number" id="H" value="2.5">
+            </div>
+        </div>
+        <div class="input-group" style="display: flex; gap: 10px;">
+            <div style="flex: 1;">
+                <label data-key="labelLead">Lead Time (gg)</label>
+                <input type="number" id="L" value="7">
+            </div>
+            <div style="flex: 1;">
+                <label data-key="labelSigma">Varianza (σ)</label>
+                <input type="number" id="sigma" value="15">
+            </div>
+        </div>
+        <button onclick="calcola()" data-key="btnCalculate">CALCOLA</button>
+    </div>
+
+    <div id="resultsArea" class="hidden">
+        <div class="results-grid">
+            <div class="card">
+                <label data-key="resEOQ">Lotto Ottimale (EOQ)</label>
+                <span id="outEOQ">0</span>
+            </div>
+            <div class="card">
+                <label data-key="resROP">Punto Riordino (ROP)</label>
+                <span id="outROP">0</span>
+            </div>
+        </div>
+
+        <div class="table-wrapper">
+            <h3 data-key="simTitle" style="font-size: 0.9rem;">Simulazione 3 Anni</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th data-key="thYear">Anno</th>
+                        <th data-key="thDemand">Domanda</th>
+                        <th data-key="thEOQ">EOQ</th>
+                        <th data-key="thCost">Costo Tot.</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+// DIZIONARIO TRADUZIONI
+const translations = {
+    it: {
+        title: "Analizzatore Scorte EOQ/ROP",
+        subtitle: "Calcolo EOQ & ROP",
+        labelDemand: "Domanda Annua (D)",
+        labelSetup: "Costo Setup (S)",
+        labelHolding: "Costo Mant. (H)",
+        labelLead: "Lead Time (gg)",
+        labelSigma: "Varianza (σ)",
+        btnCalculate: "CALCOLA",
+        resEOQ: "Lotto Ottimale (EOQ)",
+        resROP: "Punto Riordino (ROP)",
+        simTitle: "Simulazione 3 Anni",
+        thYear: "Anno",
+        thDemand: "Domanda",
+        thEOQ: "EOQ",
+        thCost: "Costo Tot."
+    },
+    en: {
+        title: "EOQ/ROP Inventory Analyzer",
+        subtitle: "EOQ & ROP Calculator",
+        labelDemand: "Annual Demand (D)",
+        labelSetup: "Setup Cost (S)",
+        labelHolding: "Holding Cost (H)",
+        labelLead: "Lead Time (days)",
+        labelSigma: "Variance (σ)",
+        btnCalculate: "CALCULATE",
+        resEOQ: "Economic Order Qty",
+        resROP: "Reorder Point",
+        simTitle: "3-Year Simulation",
+        thYear: "Year",
+        thDemand: "Demand",
+        thEOQ: "EOQ",
+        thCost: "Total Cost"
+    },
+    es: {
+        title: "Analizador de inventario EOQ/ROP",
+        subtitle: "Cálculo EOQ y ROP",
+        labelDemand: "Demanda Anual (D)",
+        labelSetup: "Costo de Pedido (S)",
+        labelHolding: "Costo Almacén (H)",
+        labelLead: "Plazo Entrega (d)",
+        labelSigma: "Varianza (σ)",
+        btnCalculate: "CALCULAR",
+        resEOQ: "Lote Económico",
+        resROP: "Punto de Pedido",
+        simTitle: "Simulación 3 Años",
+        thYear: "Año",
+        thDemand: "Demanda",
+        thEOQ: "EOQ",
+        thCost: "Coste Total"
+    }
+};
+
+function changeLanguage() {
+    const lang = document.getElementById('languagePicker').value;
+    const elements = document.querySelectorAll('[data-key]');
+    
+    elements.forEach(el => {
+        const key = el.getAttribute('data-key');
+        el.innerText = translations[lang][key];
+    });
+
+    // Se i risultati sono già visibili, ricalcola per aggiornare la tabella
+    if(!document.getElementById('resultsArea').classList.contains('hidden')) {
+        calcola();
+    }
+}
+
+function calcola() {
+    const D = parseFloat(document.getElementById('D').value);
+    const S = parseFloat(document.getElementById('S').value);
+    const H = parseFloat(document.getElementById('H').value);
+    const L = parseFloat(document.getElementById('L').value);
+    const sigma = parseFloat(document.getElementById('sigma').value);
+    const lang = document.getElementById('languagePicker').value;
+    const Z = 1.645;
+
+    const eoq = Math.sqrt((2 * D * S) / H);
+    const ss = Z * sigma * Math.sqrt(L);
+    const rop = ((D / 365) * L) + ss;
+
+    document.getElementById('outEOQ').innerText = Math.round(eoq);
+    document.getElementById('outROP').innerText = Math.round(rop);
+    document.getElementById('resultsArea').classList.remove('hidden');
+
+    const variazioni = [1, 1.2, 0.85];
+    const tbody = document.getElementById('tbody');
+    tbody.innerHTML = '';
+
+    variazioni.forEach((v, i) => {
+        let currentD = D * v;
+        let cEOQ = Math.sqrt((2 * currentD * S) / H);
+        let costo = (currentD/cEOQ * S) + (cEOQ/2 * H);
+        
+        tbody.innerHTML += `
+            <tr>
+                <td>${i+1}</td>
+                <td>${Math.round(currentD)}</td>
+                <td>${Math.round(cEOQ)}</td>
+                <td>€${Math.round(costo)}</td>
+            </tr>
+        `;
+    });
+}
+</script>
+</body>
+</html>
