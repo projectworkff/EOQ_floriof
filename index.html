@@ -1,80 +1,80 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Analizzatore EOQ/ROP Pro</title>
+<!DOCTYPE html> <!-- Dichiarazione del tipo di documento HTML5 -->
+<html lang="it"> <!-- Elemento radice HTML con lingua italiana -->
+<head> <!-- Sezione head contenente metadati della pagina -->
+    <meta charset="UTF-8"> <!-- Codifica caratteri UTF-8 per supportare caratteri speciali -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Configurazione viewport per dispositivi mobili -->
+    <title>Analizzatore EOQ/ROP Pro</title> <!-- Titolo della pagina mostrato nel browser -->
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet"> <!-- Importa font Inter da Google Fonts -->
     
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css"> <!-- Collega il file CSS esterno per gli stili -->
 </head>
-<body>
+<body> <!-- Inizio del corpo della pagina -->
 
-<div class="app-container">
-    <div class="lang-wrapper">
-        <select id="languagePicker" onchange="changeLanguage()">
-            <option value="it">🇮🇹 IT</option>
-            <option value="en">🇺🇸 EN</option>
-            <option value="es">🇪🇸 ES</option>
+<div class="app-container"> <!-- Container principale dell'applicazione -->
+    <div class="lang-wrapper"> <!-- Wrapper per il selettore di lingua -->
+        <select id="languagePicker" onchange="changeLanguage()"> <!-- Dropdown per selezione lingua con evento onChange -->
+            <option value="it">🇮🇹 IT</option> <!-- Opzione per italiano -->
+            <option value="en">🇺🇸 EN</option> <!-- Opzione per inglese -->
+            <option value="es">🇪🇸 ES</option> <!-- Opzione per spagnolo -->
         </select>
     </div>
 
-    <header>
-        <h1 data-key="title">Analizzatore EOQ/ROP</h1>
-        <p data-key="subtitle">Ottimizzazione Scorte</p>
+    <header> <!-- Sezione header dell'applicazione -->
+        <h1 data-key="title">Analizzatore EOQ/ROP</h1> <!-- Titolo principale con attributo data-key per traduzioni -->
+        <p data-key="subtitle">Ottimizzazione Scorte</p> <!-- Sottotitolo con attributo data-key per traduzioni -->
     </header>
 
-    <div class="input-section">
-        <div class="input-group">
-            <label data-key="labelD">Domanda Annua</label>
-            <input type="number" id="D" value="12000">
+    <div class="input-section"> <!-- Sezione contenente tutti i campi input -->
+        <div class="input-group"> <!-- Gruppo per input domanda annua -->
+            <label data-key="labelD">Domanda Annua</label> <!-- Etichetta per domanda annua -->
+            <input type="number" id="D" value="12000"> <!-- Campo input numerico per domanda annua con valore predefinito -->
         </div>
         
-        <div class="input-row">
-            <div class="input-group">
-                <label data-key="labelS">Costo Setup</label>
-                <input type="number" id="S" value="50">
+        <div class="input-row"> <!-- Riga contenente due input affiancati -->
+            <div class="input-group"> <!-- Gruppo per costo setup -->
+                <label data-key="labelS">Costo Setup</label> <!-- Etichetta per costo setup -->
+                <input type="number" id="S" value="50"> <!-- Campo input per costo setup -->
             </div>
-            <div class="input-group">
-                <label data-key="labelH">Costo Mantenimento</label>
-                <input type="number" id="H" value="2.5">
-            </div>
-        </div>
-        
-        <div class="input-row">
-            <div class="input-group">
-                <label data-key="labelL">Lead Time (gg)</label>
-                <input type="number" id="L" value="7">
-            </div>
-            <div class="input-group">
-                <label data-key="labelSigma">Varianza (σ)</label>
-                <input type="number" id="sigma" value="15">
+            <div class="input-group"> <!-- Gruppo per costo gestione -->
+                <label data-key="labelH">Costo Gestione</label> <!-- Etichetta per costo gestione -->
+                <input type="number" id="H" value="2.5"> <!-- Campo input per costo gestione -->
             </div>
         </div>
         
-        <button class="btn-calculate" onclick="calcola()" data-key="btn">CALCOLA RISULTATI</button>
+        <div class="input-row"> <!-- Seconda riga con due input affiancati -->
+            <div class="input-group"> <!-- Gruppo per lead time -->
+                <label data-key="labelL">Lead Time (gg)</label> <!-- Etichetta per lead time in giorni -->
+                <input type="number" id="L" value="7"> <!-- Campo input per lead time -->
+            </div>
+            <div class="input-group"> <!-- Gruppo per varianza -->
+                <label data-key="labelSigma">Varianza (σ)</label> <!-- Etichetta per varianza con simbolo sigma -->
+                <input type="number" id="sigma" value="15"> <!-- Campo input per varianza -->
+            </div>
+        </div>
+        
+        <button class="btn-calculate" onclick="calcola()" data-key="btn">CALCOLA RISULTATI</button> <!-- Pulsante per avviare il calcolo con evento onClick -->
     </div>
 
-    <div id="resultsArea" class="hidden">
-        <div class="results-main">
-            <div class="card-res">
-                <label data-key="resEOQ">Lotto Ottimale</label>
-                <span id="outEOQ">0</span>
+    <div id="resultsArea" class="hidden"> <!-- Area risultati inizialmente nascosta -->
+        <div class="results-main"> <!-- Container principale per i risultati -->
+            <div class="card-res"> <!-- Card per risultato EOQ -->
+                <label data-key="resEOQ">Lotto Ottimale</label> <!-- Etichetta per EOQ -->
+                <span id="outEOQ">0</span> <!-- Span per visualizzare il valore EOQ calcolato -->
             </div>
-            <div class="card-res">
-                <label data-key="resROP">Punto Riordino</label>
-                <span id="outROP">0</span>
+            <div class="card-res"> <!-- Card per risultato ROP -->
+                <label data-key="resROP">Punto Riordino</label> <!-- Etichetta per ROP -->
+                <span id="outROP">0</span> <!-- Span per visualizzare il valore ROP calcolato -->
             </div>
         </div>
 
-        <div class="simulation-section">
-            <h3 data-key="simTitle">Simulazione Triennale</h3>
-            <div id="simContainer"></div>
+        <div class="simulation-section"> <!-- Sezione per la simulazione triennale -->
+            <h3 data-key="simTitle">Simulazione Triennale</h3> <!-- Titolo della simulazione -->
+            <div id="simContainer"></div> <!-- Container vuoto che verrà popolato dinamicamente con le card della simulazione -->
         </div>
     </div>
 </div>
 
-<script src="script.js"></script>
-</body>
-</html>
+<script src="script.js"></script> <!-- Collegamento al file JavaScript esterno -->
+</body> <!-- Fine del corpo della pagina -->
+</html> <!-- Fine del documento HTML -->
