@@ -3,7 +3,7 @@
     --primary-dark: #1d4ed8;
     --success: #10b981;
     --danger: #ef4444;
-    --bg: #f8fafc;
+    --bg: #f1f5f9;
     --card: #ffffff;
     --text-main: #1e293b;
     --text-muted: #64748b;
@@ -11,128 +11,104 @@
 }
 
 body { 
-    font-family: 'Inter', -apple-system, sans-serif; 
+    font-family: 'Inter', sans-serif; 
     background: var(--bg); 
     color: var(--text-main); 
-    margin: 0; 
-    padding: 15px;
-    line-height: 1.5;
+    margin: 0; padding: 20px;
+    display: flex; justify-content: center;
 }
 
 .app-container { 
-    max-width: 500px; 
-    margin: auto; 
+    max-width: 480px; width: 100%;
+    margin-top: 50px;
     background: var(--card); 
-    padding: 24px; 
-    border-radius: 20px; 
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    padding: 30px 24px; 
+    border-radius: 24px; 
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    position: relative; 
 }
 
-/* Header e Lingua */
-.header-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-}
-
-header h1 { font-size: 1.4rem; margin: 0; color: var(--primary); letter-spacing: -0.5px; }
+.lang-wrapper { position: absolute; top: -45px; right: 10px; }
 
 #languagePicker {
-    padding: 6px 10px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: white;
-    font-size: 0.85rem;
-    cursor: pointer;
+    padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border);
+    background: white; font-weight: 600; cursor: pointer; color: var(--text-muted);
 }
 
-/* Input Fields */
-.input-section { display: grid; gap: 16px; }
+header { margin-bottom: 25px; }
+header h1 { font-size: 1.6rem; margin: 0; color: var(--primary); letter-spacing: -1px; }
+header p { font-size: 0.9rem; color: var(--text-muted); margin: 4px 0 0 0; }
+
+.input-section { display: grid; gap: 18px; }
+.input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .input-group { display: flex; flex-direction: column; }
-label { font-size: 0.75rem; font-weight: 700; margin-bottom: 6px; color: var(--text-muted); text-transform: uppercase; }
+
+label { 
+    font-size: 0.7rem; font-weight: 800; margin-bottom: 6px; 
+    color: var(--text-muted); text-transform: uppercase; 
+}
 
 input { 
-    width: 100%; 
-    padding: 12px; 
-    border: 1.5px solid var(--border); 
-    border-radius: 10px; 
-    font-size: 16px;
-    transition: border-color 0.2s;
+    width: 100%; padding: 14px; border: 1.5px solid var(--border); 
+    border-radius: 12px; font-size: 16px; box-sizing: border-box; background: #f8fafc;
 }
-
-input:focus { outline: none; border-color: var(--primary); }
 
 .btn-calculate { 
-    width: 100%; 
-    padding: 16px; 
-    background: var(--primary); 
-    color: white; 
-    border: none; 
-    border-radius: 12px; 
-    font-size: 1rem; 
-    font-weight: 700; 
-    cursor: pointer;
-    margin-top: 10px;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    width: 100%; padding: 16px; background: var(--primary); color: white; 
+    border: none; border-radius: 14px; font-size: 1rem; font-weight: 700; cursor: pointer;
 }
 
-/* Risultati Principali (EOQ & ROP) */
-.results-main { 
-    display: grid; 
-    grid-template-columns: 1fr 1fr; 
-    gap: 12px; 
-    margin-top: 30px; 
-}
+.results-main { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; }
 
 .card-res { 
-    background: #f1f5f9; 
-    padding: 16px; 
-    border-radius: 14px; 
-    text-align: center;
+    background: #f8fafc; padding: 18px; border-radius: 18px; 
+    text-align: center; border: 1px solid var(--border); 
 }
 
-.card-res label { font-size: 0.65rem; color: var(--text-muted); display: block; margin-bottom: 4px; }
-.card-res span { font-size: 1.3rem; font-weight: 800; color: var(--primary); }
+.card-res label { font-size: 0.65rem; display: block; margin-bottom: 8px; }
+.card-res span { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
 
-/* Simulazione Triennale (Nuovo Design a Card) */
 .simulation-section { margin-top: 35px; }
 .simulation-section h3 { font-size: 1rem; margin-bottom: 15px; font-weight: 700; }
 
 .sim-card {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 15px;
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: grid; grid-template-columns: auto 1fr auto;
+    align-items: center; gap: 15px;
+    background: #fff; border: 1px solid var(--border);
+    border-radius: 16px; padding: 16px; margin-bottom: 12px;
 }
 
-.sim-info { display: flex; align-items: center; }
 .year-circle {
-    width: 35px;
-    height: 35px;
-    background: var(--primary);
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.8rem;
-    font-weight: bold;
-    margin-right: 12px;
+    width: 38px; height: 38px; background: var(--primary);
+    color: white; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center; font-weight: 800;
 }
 
-.demand-text b { display: block; font-size: 0.95rem; }
-.demand-text small { font-size: 0.75rem; font-weight: 600; }
+.demand-info { display: flex; flex-direction: column; }
+.demand-info b { font-size: 1rem; }
 
-.sim-values { text-align: right; }
-.sim-values .eoq-val { display: block; font-weight: 800; color: var(--primary); }
-.sim-values .cost-val { font-size: 0.75rem; color: var(--success); font-weight: 600; }
+.tag { 
+    font-size: 0.65rem; font-weight: 700; padding: 2px 6px; 
+    border-radius: 6px; width: fit-content; margin-top: 3px; 
+}
 
-.up { color: var(--danger); }
-.down { color: var(--success); }
+.growth { background: #dcfce7; color: var(--success); }
+.decline { background: #fee2e2; color: var(--danger); }
+.base-tag { background: #f1f5f9; color: var(--text-muted); }
+
+.cost-block { 
+    display: flex; flex-direction: column; align-items: flex-end; 
+    border-left: 1px solid var(--border); padding-left: 15px; 
+}
+
+.mini-label { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
+.eoq-small { font-weight: 800; color: var(--primary); font-size: 1rem; }
+.cost-small { font-size: 0.85rem; font-weight: 700; margin-top: 4px; }
+
+.unit-badge { 
+    background: #f8fafc; color: var(--text-muted); padding: 2px 8px; 
+    border-radius: 20px; font-size: 0.65rem; font-weight: 700; 
+    margin-top: 4px; border: 1px solid var(--border); 
+}
 
 .hidden { display: none; }
