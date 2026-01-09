@@ -1,211 +1,109 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <!-- Meta tags per configurazione base della pagina -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Analizzatore EOQ/ROP</title>
-    
-    <!-- Font Google per migliorare la tipografia -->
+    <title>Analizzatore EOQ/ROP Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Stili CSS per l'interfaccia dell'applicazione -->
     <style>
-        /* Variabili CSS per colori e temi dell'applicazione */
         :root {
-            --primary: #2563eb;        /* Blu principale per elementi primari */
-            --primary-dark: #1d4ed8;   /* Blu scuro per variazioni */
-            --success: #10b981;        /* Verde per indicatori positivi */
-            --danger: #ef4444;         /* Rosso per indicatori negativi */
-            --bg: #f1f5f9;             /* Colore sfondo principale */
-            --card: #ffffff;           /* Colore sfondo card */
-            --text-main: #1e293b;      /* Colore testo principale */
-            --text-muted: #64748b;     /* Colore testo secondario */
-            --border: #e2e8f0;         /* Colore bordi */
+            --primary: #2563eb;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg: #f1f5f9;
+            --card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
         }
 
-        /* Stili per il body con layout centrato */
         body { 
             font-family: 'Inter', sans-serif; 
             background: var(--bg); 
             color: var(--text-main); 
-            margin: 0; 
-            padding: 20px;
-            display: flex;
-            justify-content: center;
+            margin: 0; padding: 20px;
+            display: flex; justify-content: center;
         }
 
-        /* Container principale dell'applicazione */
         .app-container { 
-            max-width: 480px; 
-            width: 100%;
+            max-width: 480px; width: 100%;
             margin-top: 50px;
             background: var(--card); 
             padding: 30px 24px; 
             border-radius: 24px; 
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
             position: relative; 
         }
 
-        /* Wrapper per il selettore di lingua posizionato sopra il container */
-        .lang-wrapper {
-            position: absolute;
-            top: -45px;
-            right: 10px;
-        }
-
-        /* Stili per il selettore di lingua con effetto blur */
+        .lang-wrapper { position: absolute; top: -45px; right: 10px; }
         #languagePicker {
-            padding: 6px 12px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(8px);
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-            color: var(--text-muted);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border);
+            background: white; font-weight: 600; cursor: pointer; color: var(--text-muted);
         }
 
-        /* Header dell'applicazione */
         header { margin-bottom: 25px; }
         header h1 { font-size: 1.6rem; margin: 0; color: var(--primary); letter-spacing: -1px; }
         header p { font-size: 0.9rem; color: var(--text-muted); margin: 4px 0 0 0; }
 
-        /* Sezione input con layout a griglia */
         .input-section { display: grid; gap: 18px; }
         .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .input-group { display: flex; flex-direction: column; }
         
-        /* Stili per le etichette degli input */
-        label { 
-            font-size: 0.7rem; 
-            font-weight: 800; 
-            margin-bottom: 6px; 
-            color: var(--text-muted); 
-            text-transform: uppercase; 
-            letter-spacing: 0.5px;
-        }
-
-        /* Stili per i campi input con transizioni */
+        label { font-size: 0.7rem; font-weight: 800; margin-bottom: 6px; color: var(--text-muted); text-transform: uppercase; }
         input { 
-            width: 100%; 
-            padding: 14px; 
-            border: 1.5px solid var(--border); 
-            border-radius: 12px; 
-            font-size: 16px;
-            box-sizing: border-box;
-            background: #f8fafc;
-            transition: all 0.2s;
+            width: 100%; padding: 14px; border: 1.5px solid var(--border); 
+            border-radius: 12px; font-size: 16px; box-sizing: border-box; background: #f8fafc;
         }
 
-        /* Stato focus per gli input */
-        input:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
-
-        /* Pulsante principale per il calcolo */
         .btn-calculate { 
-            width: 100%; 
-            padding: 16px; 
-            background: var(--primary); 
-            color: white; 
-            border: none; 
-            border-radius: 14px; 
-            font-size: 1rem; 
-            font-weight: 700; 
-            cursor: pointer;
-            margin-top: 10px;
-            transition: transform 0.1s;
-        }
-        /* Effetto click per il pulsante */
-        .btn-calculate:active { transform: scale(0.98); }
-
-        /* Sezione principale dei risultati con layout a griglia */
-        .results-main { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 15px; 
-            margin-top: 30px; 
+            width: 100%; padding: 16px; background: var(--primary); color: white; 
+            border: none; border-radius: 14px; font-size: 1rem; font-weight: 700; cursor: pointer;
         }
 
-        /* Card per visualizzare i risultati principali */
-        .card-res { 
-            background: #f8fafc; 
-            padding: 18px; 
-            border-radius: 18px; 
-            text-align: center;
-            border: 1px solid var(--border);
-        }
-
-        /* Stili per etichette e valori nelle card risultato */
-        .card-res label { font-size: 0.65rem; margin-bottom: 8px; }
+        .results-main { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; }
+        .card-res { background: #f8fafc; padding: 18px; border-radius: 18px; text-align: center; border: 1px solid var(--border); }
+        .card-res label { font-size: 0.65rem; display: block; margin-bottom: 8px; }
         .card-res span { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
 
-        /* Sezione per la simulazione triennale */
+        /* NUOVO STILE CARD SIMULAZIONE */
         .simulation-section { margin-top: 35px; }
-        .simulation-section h3 { font-size: 1rem; margin-bottom: 15px; font-weight: 700; color: var(--text-main); }
-
-        /* Card per ogni anno della simulazione */
         .sim-card {
-            background: #fff;
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            animation: slideIn 0.3s ease-out;
+            display: grid; grid-template-columns: auto 1fr auto;
+            align-items: center; gap: 15px;
+            background: #fff; border: 1px solid var(--border);
+            border-radius: 16px; padding: 16px; margin-bottom: 12px;
         }
 
-        /* Animazione di entrata per le card */
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Informazioni della simulazione (anno e domanda) */
-        .sim-info { display: flex; align-items: center; }
-        
-        /* Cerchio con il numero dell'anno */
         .year-circle {
-            width: 38px;
-            height: 38px;
-            background: var(--primary);
-            color: white;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
-            font-weight: 800;
-            margin-right: 14px;
+            width: 38px; height: 38px; background: var(--primary);
+            color: white; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; font-weight: 800;
         }
 
-        /* Testo della domanda e tag percentuale */
-        .demand-text b { display: block; font-size: 1rem; }
-        .demand-text small { font-size: 0.75rem; font-weight: 700; padding: 2px 6px; border-radius: 6px; }
+        .demand-info { display: flex; flex-direction: column; }
+        .demand-info b { font-size: 1rem; }
+        .tag { font-size: 0.65rem; font-weight: 700; padding: 2px 6px; border-radius: 6px; width: fit-content; margin-top: 3px; }
+        .growth { background: #dcfce7; color: var(--success); }
+        .decline { background: #fee2e2; color: var(--danger); }
+        .base-tag { background: #f1f5f9; color: var(--text-muted); }
 
-        /* Valori della simulazione (EOQ e costo) */
-        .sim-values { text-align: right; }
-        .sim-values .eoq-val { display: block; font-weight: 800; color: var(--primary); font-size: 1.1rem; }
-        .sim-values .cost-val { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
-        .sim-values .unit-val { font-size: 0.7rem; color: var(--text-muted); font-style: italic; }
+        .cost-block { display: flex; flex-direction: column; align-items: flex-end; border-left: 1px solid var(--border); padding-left: 15px; }
+        .mini-label { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
+        .eoq-small { font-weight: 800; color: var(--primary); font-size: 1rem; }
+        .cost-small { font-size: 0.85rem; font-weight: 700; margin-top: 4px; }
+        .unit-badge { 
+            background: #f8fafc; color: var(--text-muted); padding: 2px 8px; 
+            border-radius: 20px; font-size: 0.65rem; font-weight: 700; 
+            margin-top: 4px; border: 1px solid var(--border); 
+        }
 
-        /* Classi per i tag colorati delle variazioni */
-        .growth { background: #dcfce7; color: var(--success); } /* Crescita = Verde */
-        .decline { background: #fee2e2; color: var(--danger); } /* Declino = Rosso */
-        .base-tag { background: #f1f5f9; color: var(--text-muted); } /* Base = Grigio */
-
-        /* Classe per nascondere elementi */
         .hidden { display: none; }
     </style>
 </head>
 <body>
 
-<!-- Container principale dell'applicazione -->
 <div class="app-container">
-    <!-- Selettore di lingua posizionato in alto a destra -->
     <div class="lang-wrapper">
         <select id="languagePicker" onchange="changeLanguage()">
             <option value="it">🇮🇹 IT</option>
@@ -214,215 +112,111 @@
         </select>
     </div>
 
-    <!-- Header con titolo e sottotitolo multilingua -->
     <header>
         <h1 data-key="title">Analizzatore EOQ/ROP</h1>
         <p data-key="subtitle">Ottimizzazione Scorte</p>
     </header>
 
-    <!-- Sezione input per i parametri di calcolo -->
     <div class="input-section">
-        <!-- Input per la domanda annua -->
         <div class="input-group">
             <label data-key="labelD">Domanda Annua</label>
             <input type="number" id="D" value="12000">
         </div>
-        
-        <!-- Prima riga: Costo Setup e Costo Mantenimento -->
         <div class="input-row">
-            <div class="input-group">
-                <label data-key="labelS">Costo Setup</label>
-                <input type="number" id="S" value="50">
-            </div>
-            <div class="input-group">
-                <label data-key="labelH">Costo Mantenimento</label>
-                <input type="number" id="H" value="2.5">
-            </div>
+            <div class="input-group"><label data-key="labelS">Costo Setup</label><input type="number" id="S" value="50"></div>
+            <div class="input-group"><label data-key="labelH">Costo Mantenimento</label><input type="number" id="H" value="2.5"></div>
         </div>
-        
-        <!-- Seconda riga: Lead Time e Varianza -->
         <div class="input-row">
-            <div class="input-group">
-                <label data-key="labelL">Lead Time (gg)</label>
-                <input type="number" id="L" value="7">
-            </div>
-            <div class="input-group">
-                <label data-key="labelSigma">Varianza (σ)</label>
-                <input type="number" id="sigma" value="15">
-            </div>
+            <div class="input-group"><label data-key="labelL">Lead Time (gg)</label><input type="number" id="L" value="7"></div>
+            <div class="input-group"><label data-key="labelSigma">Varianza (σ)</label><input type="number" id="sigma" value="15"></div>
         </div>
-        
-        <!-- Pulsante per avviare il calcolo -->
         <button class="btn-calculate" onclick="calcola()" data-key="btn">CALCOLA RISULTATI</button>
     </div>
 
-    <!-- Area risultati (inizialmente nascosta) -->
     <div id="resultsArea" class="hidden">
-        <!-- Risultati principali: EOQ e ROP -->
         <div class="results-main">
-            <div class="card-res">
-                <label data-key="resEOQ">Lotto Ottimale</label>
-                <span id="outEOQ">0</span>
-            </div>
-            <div class="card-res">
-                <label data-key="resROP">Punto Riordino</label>
-                <span id="outROP">0</span>
-            </div>
+            <div class="card-res"><label data-key="resEOQ">Lotto Ottimale</label><span id="outEOQ">0</span></div>
+            <div class="card-res"><label data-key="resROP">Punto Riordino</label><span id="outROP">0</span></div>
         </div>
-
-        <!-- Sezione simulazione triennale -->
         <div class="simulation-section">
             <h3 data-key="simTitle">Simulazione Triennale</h3>
-            <!-- Container dinamico per le card della simulazione -->
             <div id="simContainer"></div>
         </div>
     </div>
 </div>
 
-<!-- Script JavaScript per funzionalità e calcoli -->
 <script>
-    // Oggetto contenente tutte le traduzioni per le tre lingue supportate
     const translations = {
-        // Traduzioni in italiano
         it: {
-            title: "Analizzatore EOQ/ROP",
-            subtitle: "Ottimizzazione Scorte",
-            labelD: "Domanda Annua",
-            labelS: "Costo Setup",
-            labelH: "Costo Mantenimento",
-            labelL: "Lead Time (gg)",
-            labelSigma: "Varianza (σ)",
-            btn: "CALCOLA RISULTATI",
-            resEOQ: "Lotto Ottimale",
-            resROP: "Punto Riordino",
-            simTitle: "Simulazione Triennale",
-            year: "Anno",
-            base: "BASE",
-            eoqLabel: "Lotto: ",
-            costLabel: "Costo: ",
-            unitLabel: "Unitario: "
+            title: "Analizzatore EOQ/ROP", subtitle: "Ottimizzazione Scorte",
+            labelD: "Domanda Annua", labelS: "Costo Setup", labelH: "Costo Mantenimento",
+            labelL: "Lead Time (gg)", labelSigma: "Varianza (σ)", btn: "CALCOLA RISULTATI",
+            resEOQ: "Lotto Ottimale", resROP: "Punto Riordino", simTitle: "Simulazione Triennale",
+            base: "BASE", eoqLabel: "Lotto", unitLabel: "Unitario:"
         },
-        // Traduzioni in inglese
         en: {
-            title: "EOQ/ROP Optimizer",
-            subtitle: "Inventory Management",
-            labelD: "Annual Demand",
-            labelS: "Setup Cost",
-            labelH: "Holding Cost",
-            labelL: "Lead Time (days)",
-            labelSigma: "Variance (σ)",
-            btn: "CALCULATE RESULTS",
-            resEOQ: "Optimal Lot",
-            resROP: "Reorder Point",
-            simTitle: "3-Year Simulation",
-            year: "Year",
-            base: "BASE",
-            eoqLabel: "Lot: ",
-            costLabel: "Cost: ",
-            unitLabel: "Per Unit:"
+            title: "EOQ/ROP Optimizer", subtitle: "Inventory Management",
+            labelD: "Annual Demand", labelS: "Setup Cost", labelH: "Holding Cost",
+            labelL: "Lead Time (days)", labelSigma: "Variance (σ)", btn: "CALCULATE RESULTS",
+            resEOQ: "Optimal Lot", resROP: "Reorder Point", simTitle: "3-Year Simulation",
+            base: "BASE", eoqLabel: "Lot", unitLabel: "Per Unit:"
         },
-        // Traduzioni in spagnolo
         es: {
-            title: "Optimizador EOQ/ROP",
-            subtitle: "Gestión de Stock",
-            labelD: "Demanda Anual",
-            labelS: "Coste Pedido",
-            labelH: "Coste Almacén",
-            labelL: "Plazo Entrega (d)",
-            labelSigma: "Varianza (σ)",
-            btn: "CALCULAR RESULTADOS",
-            resEOQ: "Lote Óptimo",
-            resROP: "Punto Pedido",
-            simTitle: "Simulación 3 Años",
-            year: "Año",
-            base: "BASE",
-            eoqLabel: "Lote: ",
-            costLabel: "Coste: ",
-            unitLabel: "Unitario:"
+            title: "Optimizador EOQ/ROP", subtitle: "Gestión de Stock",
+            labelD: "Demanda Anual", labelS: "Coste Pedido", labelH: "Coste Almacén",
+            labelL: "Plazo Entrega (d)", labelSigma: "Varianza (σ)", btn: "CALCULAR RESULTADOS",
+            resEOQ: "Lote Óptimo", resROP: "Punto Pedido", simTitle: "Simulación 3 Años",
+            base: "BASE", eoqLabel: "Lote", unitLabel: "Unitario:"
         }
     };
 
-    /**
-     * Funzione per cambiare la lingua dell'interfaccia
-     * Aggiorna tutti gli elementi con attributo data-key
-     */
     function changeLanguage() {
         const lang = document.getElementById('languagePicker').value;
         const keys = ['title', 'subtitle', 'labelD', 'labelS', 'labelH', 'labelL', 'labelSigma', 'btn', 'resEOQ', 'resROP', 'simTitle'];
-        
-        // Aggiorna il testo di ogni elemento
-        keys.forEach(key => {
-            const el = document.querySelector(`[data-key="${key}"]`);
-            if (el) el.innerText = translations[lang][key];
-        });
-        
-        // Se i risultati sono visibili, ricalcola per aggiornare la simulazione
+        keys.forEach(key => { document.querySelector(`[data-key="${key}"]`).innerText = translations[lang][key]; });
         if (!document.getElementById('resultsArea').classList.contains('hidden')) calcola();
     }
 
-    /**
-     * Funzione principale per calcolare EOQ, ROP e generare la simulazione
-     */
     function calcola() {
-        // Recupera i valori dai campi input
-        const D = parseFloat(document.getElementById('D').value);     // Domanda annua
-        const S = parseFloat(document.getElementById('S').value);     // Costo setup
-        const H = parseFloat(document.getElementById('H').value);     // Costo mantenimento
-        const L = parseFloat(document.getElementById('L').value);     // Lead time
-        const sigma = parseFloat(document.getElementById('sigma').value); // Varianza
-        const lang = document.getElementById('languagePicker').value; // Lingua corrente
-        const Z = 1.645; // Fattore di sicurezza per il 95% di livello di servizio
+        const D = parseFloat(document.getElementById('D').value);
+        const S = parseFloat(document.getElementById('S').value);
+        const H = parseFloat(document.getElementById('H').value);
+        const L = parseFloat(document.getElementById('L').value);
+        const sigma = parseFloat(document.getElementById('sigma').value);
+        const lang = document.getElementById('languagePicker').value;
+        const Z = 1.645; 
 
-        // Calcolo delle formule principali
-        const eoq = Math.sqrt((2 * D * S) / H);        // Formula EOQ (Economic Order Quantity)
-        const ss = Z * sigma * Math.sqrt(L);           // Scorta di sicurezza
-        const rop = ((D / 365) * L) + ss;              // Punto di riordino (ROP)
-
-        // Aggiorna i risultati nell'interfaccia
-        document.getElementById('outEOQ').innerText = Math.round(eoq);
-        document.getElementById('outROP').innerText = Math.round(rop);
+        document.getElementById('outEOQ').innerText = Math.round(Math.sqrt((2 * D * S) / H));
+        document.getElementById('outROP').innerText = Math.round(((D / 365) * L) + (Z * sigma * Math.sqrt(L)));
         document.getElementById('resultsArea').classList.remove('hidden');
 
-        // Genera la simulazione triennale
         const simContainer = document.getElementById('simContainer');
-        simContainer.innerHTML = ''; // Pulisce il contenuto precedente
-        const variazioni = [1, 1.25, 0.80]; // Anno 1: base, Anno 2: +25%, Anno 3: -20%
+        simContainer.innerHTML = '';
+        const variazioni = [1, 1.25, 0.80]; 
 
-        // Genera una card per ogni anno della simulazione
         variazioni.forEach((v, i) => {
-            let curD = D * v;                                    // Domanda per l'anno corrente
-            let curEOQ = Math.sqrt((2 * curD * S) / H);         // EOQ per l'anno corrente
-            let curCost = (curD / curEOQ * S) + (curEOQ / 2 * H); // Costo totale per l'anno
-            let unitCost = curCost / curD;                      // Costo di gestione per singola unità
+            let curD = D * v;
+            let curEOQ = Math.sqrt((2 * curD * S) / H);
+            let curCost = (curD / curEOQ * S) + (curEOQ / 2 * H);
+            let unitCost = curCost / curD;
             
-            // Calcola la percentuale di variazione e determina il tag colorato
             let perc = Math.round((v - 1) * 100);
-            let classTag = 'base-tag';
-            let labelTag = translations[lang].base;
+            let classTag = perc === 0 ? 'base-tag' : (perc > 0 ? 'growth' : 'decline');
+            let labelTag = perc === 0 ? translations[lang].base : (perc > 0 ? `+${perc}%` : `${perc}%`);
 
-            // Assegna colore e testo in base alla variazione
-            if (perc > 0) {
-                classTag = 'growth';   // Verde per crescita
-                labelTag = `+${perc}%`;
-            } else if (perc < 0) {
-                classTag = 'decline';  // Rosso per declino
-                labelTag = `${perc}%`;
-            }
-
-            // Genera l'HTML per la card dell'anno corrente
             simContainer.innerHTML += `
                 <div class="sim-card">
-                    <div class="sim-info">
-                        <div class="year-circle">${i + 1}</div>
-                        <div class="demand-text">
-                            <b>${Math.round(curD).toLocaleString()} u</b>
-                            <small class="${classTag}">${labelTag}</small>
-                        </div>
+                    <div class="year-circle">${i + 1}</div>
+                    <div class="demand-info">
+                        <small class="mini-label">Domanda</small>
+                        <b>${Math.round(curD).toLocaleString()} u</b>
+                        <span class="tag ${classTag}">${labelTag}</span>
                     </div>
-                    <div class="sim-values">
-                        <span class="eoq-val">${Math.round(curEOQ)}</span>
-                        <span class="cost-val">€${Math.round(curCost).toLocaleString()}</span>
-                        <span class="unit-val">${translations[lang].unitLabel}€${unitCost.toFixed(3)}</span>
+                    <div class="cost-block">
+                        <small class="mini-label">${translations[lang].eoqLabel}</small>
+                        <span class="eoq-small">${Math.round(curEOQ)}</span>
+                        <span class="cost-small">€${Math.round(curCost).toLocaleString()}</span>
+                        <span class="unit-badge">${translations[lang].unitLabel} €${unitCost.toFixed(3)}</span>
                     </div>
                 </div>
             `;
