@@ -1,3 +1,4 @@
+// Oggetto contenente tutte le traduzioni
 const translations = {
     it: {
         title: "Analizzatore EOQ/ROP",
@@ -11,10 +12,9 @@ const translations = {
         resEOQ: "Lotto Ottimale",
         resROP: "Punto Riordino",
         simTitle: "Simulazione Triennale",
-        year: "Anno",
-        base: "Base",
-        eoqLabel: "Lotto: ",
-        costLabel: "Costo Tot: "
+        base: "BASE",
+        eoqLabel: "Lotto",
+        unitLabel: "Unitario:"
     },
     en: {
         title: "EOQ/ROP Optimizer",
@@ -28,10 +28,9 @@ const translations = {
         resEOQ: "Optimal Lot",
         resROP: "Reorder Point",
         simTitle: "3-Year Simulation",
-        year: "Year",
-        base: "Base",
-        eoqLabel: "Lot: ",
-        costLabel: "Total Cost: "
+        base: "BASE",
+        eoqLabel: "Lot",
+        unitLabel: "Per Unit:"
     },
     es: {
         title: "Optimizador EOQ/ROP",
@@ -43,79 +42,81 @@ const translations = {
         labelSigma: "Varianza (σ)",
         btn: "CALCULAR RESULTADOS",
         resEOQ: "Lote Óptimo",
-        resROP: "Punto de Pedido",
+        resROP: "Punto Pedido",
         simTitle: "Simulación 3 Años",
-        year: "Año",
-        base: "Base",
-        eoqLabel: "Lote: ",
-        costLabel: "Coste Tot: "
+        base: "BASE",
+        eoqLabel: "Lote",
+        unitLabel: "Unitario:"
     }
 };
 
+/**
+ * Funzione per il cambio lingua
+ */
 function changeLanguage() {
     const lang = document.getElementById('languagePicker').value;
-    document.querySelector('[data-key="title"]').innerText = translations[lang].title;
-    document.querySelector('[data-key="subtitle"]').innerText = translations[lang].subtitle;
-    document.querySelector('[data-key="labelD"]').innerText = translations[lang].labelD;
-    document.querySelector('[data-key="labelS"]').innerText = translations[lang].labelS;
-    document.querySelector('[data-key="labelH"]').innerText = translations[lang].labelH;
-    document.querySelector('[data-key="labelL"]').innerText = translations[lang].labelL;
-    document.querySelector('[data-key="labelSigma"]').innerText = translations[lang].labelSigma;
-    document.querySelector('[data-key="btn"]').innerText = translations[lang].btn;
-    document.querySelector('[data-key="resEOQ"]').innerText = translations[lang].resEOQ;
-    document.querySelector('[data-key="resROP"]').innerText = translations[lang].resROP;
-    document.querySelector('[data-key="simTitle"]').innerText = translations[lang].simTitle;
-
-    if (!document.getElementById('resultsArea').classList.contains('hidden')) {
-        calcola();
-    }
+    const keys = ['title', 'subtitle', 'labelD', 'labelS', 'labelH', 'labelL', 'labelSigma', 'btn', 'resEOQ', 'resROP', 'simTitle'];
+    
+    keys.forEach(key => {
+        const el = document.querySelector(`[data-key="${key}"]`);
+        if (el) el.innerText = translations[lang][key];
+    });
+    
+    // Se i risultati sono aperti, ricalcola per aggiornare i testi nella simulazione
+    if (!document.getElementById('resultsArea').classList.contains('hidden')) calcola();
 }
 
+/**
+ * Funzione di calcolo principale (EOQ, ROP e Simulazione)
+ */
 function calcola() {
+    // Input
     const D = parseFloat(document.getElementById('D').value);
     const S = parseFloat(document.getElementById('S').value);
     const H = parseFloat(document.getElementById('H').value);
     const L = parseFloat(document.getElementById('L').value);
     const sigma = parseFloat(document.getElementById('sigma').value);
     const lang = document.getElementById('languagePicker').value;
+    
+    // Costanti e Formule
     const Z = 1.645; 
-
-    // Calcoli Base
     const eoq = Math.sqrt((2 * D * S) / H);
     const ss = Z * sigma * Math.sqrt(L);
     const rop = ((D / 365) * L) + ss;
 
-    // Visualizzazione Risultati Principali
+    // Output Risultati Principali
     document.getElementById('outEOQ').innerText = Math.round(eoq);
     document.getElementById('outROP').innerText = Math.round(rop);
     document.getElementById('resultsArea').classList.remove('hidden');
 
-    // Generazione Card di Simulazione
+    // Generazione Simulazione
     const simContainer = document.getElementById('simContainer');
     simContainer.innerHTML = '';
-    const variazioni = [1, 1.25, 0.80]; // Simuliamo fluttuazioni
+    const variazioni = [1, 1.25, 0.80]; 
 
     variazioni.forEach((v, i) => {
         let curD = D * v;
         let curEOQ = Math.sqrt((2 * curD * S) / H);
         let curCost = (curD / curEOQ * S) + (curEOQ / 2 * H);
+        let unitCost = curCost / curD;
         
         let perc = Math.round((v - 1) * 100);
-        let labelPerc = perc === 0 ? translations[lang].base : (perc > 0 ? `+${perc}%` : `${perc}%`);
-        let classPerc = perc === 0 ? '' : (perc > 0 ? 'up' : 'down');
+        let classTag = perc === 0 ? 'base-tag' : (perc > 0 ? 'growth' : 'decline');
+        let labelTag = perc === 0 ? translations[lang].base : (perc > 0 ? `+${perc}%` : `${perc}%`);
 
         simContainer.innerHTML += `
             <div class="sim-card">
-                <div class="sim-info">
-                    <div class="year-circle">${i + 1}</div>
-                    <div class="demand-text">
-                        <b>${Math.round(curD)} unità</b>
-                        <small class="${classPerc}">${labelPerc}</small>
-                    </div>
+                <div class="year-circle">${i + 1}</div>
+                <div class="demand-info">
+                    <small class="mini-label">Domanda</small>
+                    <b>${Math.round(curD).toLocaleString()} u</b>
+                    <span class="tag ${classTag}">${labelTag}</span>
                 </div>
-                <div class="sim-values">
-                    <span class="eoq-val">${translations[lang].eoqLabel} ${Math.round(curEOQ)}</span>
-                    <span class="cost-val">€${Math.round(curCost)}</span>
+                <div class="cost-block">
+                    <small class="mini-label">${translations[lang].eoqLabel}</small>
+                    <span class="eoq-small">${Math.round(curEOQ)}</span>
+                    <span class="cost-small">€${Math.round(curCost).toLocaleString()}</span>
+                    <span class="unit-badge">${translations[lang].unitLabel} €${unitCost.toFixed(3)}</span>
                 </div>
             </div>
         `;
