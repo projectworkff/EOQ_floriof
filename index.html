@@ -190,6 +190,7 @@
         .sim-values { text-align: right; }
         .sim-values .eoq-val { display: block; font-weight: 800; color: var(--primary); font-size: 1.1rem; }
         .sim-values .cost-val { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+        .sim-values .unit-val { font-size: 0.7rem; color: var(--text-muted); font-style: italic; }
 
         /* Classi per i tag colorati delle variazioni */
         .growth { background: #dcfce7; color: var(--success); } /* Crescita = Verde */
@@ -392,6 +393,7 @@
             let curD = D * v;                                    // Domanda per l'anno corrente
             let curEOQ = Math.sqrt((2 * curD * S) / H);         // EOQ per l'anno corrente
             let curCost = (curD / curEOQ * S) + (curEOQ / 2 * H); // Costo totale per l'anno
+            let unitCost = curCost / curD;                      // Costo di gestione per singola unità
             
             // Calcola la percentuale di variazione e determina il tag colorato
             let perc = Math.round((v - 1) * 100);
@@ -420,7 +422,7 @@
                     <div class="sim-values">
                         <span class="eoq-val">${Math.round(curEOQ)}</span>
                         <span class="cost-val">€${Math.round(curCost).toLocaleString()}</span>
-                        <span class="unit-val">${translations[lang].unitLabel} €${unitCost.toFixed(3)}</span>
+                        <span class="unit-val">${translations[lang].unitLabel}€${unitCost.toFixed(3)}</span>
                     </div>
                 </div>
             `;
