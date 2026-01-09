@@ -298,7 +298,8 @@
             year: "Anno",
             base: "BASE",
             eoqLabel: "Lotto: ",
-            costLabel: "Costo: "
+            costLabel: "Costo: ",
+            unitLabel: "Unitario: "
         },
         // Traduzioni in inglese
         en: {
@@ -316,7 +317,8 @@
             year: "Year",
             base: "BASE",
             eoqLabel: "Lot: ",
-            costLabel: "Cost: "
+            costLabel: "Cost: ",
+            unitLabel: "Per Unit:"
         },
         // Traduzioni in spagnolo
         es: {
@@ -334,7 +336,8 @@
             year: "Año",
             base: "BASE",
             eoqLabel: "Lote: ",
-            costLabel: "Coste: "
+            costLabel: "Coste: ",
+            unitLabel: "Unitario:"
         }
     };
 
@@ -417,6 +420,7 @@
                     <div class="sim-values">
                         <span class="eoq-val">${Math.round(curEOQ)}</span>
                         <span class="cost-val">€${Math.round(curCost).toLocaleString()}</span>
+                        <span class="unit-val">${translations[lang].unitLabel} €${unitCost.toFixed(3)}</span>
                     </div>
                 </div>
             `;
