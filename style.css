@@ -1,114 +1,137 @@
+/* Definizione delle variabili CSS globali per colori e temi */
 :root {
-    --primary: #2563eb;
-    --primary-dark: #1d4ed8;
-    --success: #10b981;
-    --danger: #ef4444;
-    --bg: #f1f5f9;
-    --card: #ffffff;
-    --text-main: #1e293b;
-    --text-muted: #64748b;
-    --border: #e2e8f0;
+    --primary: #2563eb;        /* Colore blu principale per elementi primari */
+    --primary-dark: #1d4ed8;   /* Versione più scura del blu principale */
+    --success: #10b981;        /* Verde per indicatori di successo/crescita */
+    --danger: #ef4444;         /* Rosso per indicatori di pericolo/declino */
+    --bg: #f1f5f9;             /* Colore di sfondo principale della pagina */
+    --card: #ffffff;           /* Colore bianco per le card */
+    --text-main: #1e293b;      /* Colore del testo principale */
+    --text-muted: #64748b;     /* Colore del testo secondario/attenuato */
+    --border: #e2e8f0;         /* Colore dei bordi */
 }
 
+/* Stili per il corpo della pagina */
 body { 
-    font-family: 'Inter', sans-serif; 
-    background: var(--bg); 
-    color: var(--text-main); 
-    margin: 0; padding: 20px;
-    display: flex; justify-content: center;
+    font-family: 'Inter', sans-serif; /* Font Inter importato da Google Fonts */
+    background: var(--bg);            /* Sfondo usando la variabile CSS */
+    color: var(--text-main);          /* Colore testo principale */
+    margin: 0; padding: 20px;         /* Reset margini e padding di 20px */
+    display: flex; justify-content: center; /* Layout flex centrato orizzontalmente */
 }
 
+/* Container principale dell'applicazione */
 .app-container { 
-    max-width: 480px; width: 100%;
-    margin-top: 50px;
-    background: var(--card); 
-    padding: 30px 24px; 
-    border-radius: 24px; 
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-    position: relative; 
+    max-width: 480px; width: 100%;   /* Larghezza massima 480px, responsive al 100% */
+    margin-top: 50px;                 /* Margine superiore per spaziatura */
+    background: var(--card);          /* Sfondo bianco per la card */
+    padding: 30px 24px;               /* Padding interno */
+    border-radius: 24px;              /* Angoli arrotondati */
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); /* Ombra per effetto elevazione */
+    position: relative;               /* Posizionamento relativo per elementi assoluti figli */
 }
 
+/* Wrapper per il selettore di lingua posizionato sopra il container */
 .lang-wrapper { position: absolute; top: -45px; right: 10px; }
 
+/* Stili per il dropdown di selezione lingua */
 #languagePicker {
-    padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border);
-    background: white; font-weight: 600; cursor: pointer; color: var(--text-muted);
+    padding: 6px 12px; border-radius: 10px; border: 1px solid var(--border); /* Padding, bordi arrotondati e bordo */
+    background: white; font-weight: 600; cursor: pointer; color: var(--text-muted); /* Sfondo, peso font, cursore e colore */
 }
 
-header { margin-bottom: 25px; }
-header h1 { font-size: 1.6rem; margin: 0; color: var(--primary); letter-spacing: -1px; }
-header p { font-size: 0.9rem; color: var(--text-muted); margin: 4px 0 0 0; }
+/* Stili per la sezione header */
+header { margin-bottom: 25px; } /* Margine inferiore per spaziatura */
+header h1 { font-size: 1.6rem; margin: 0; color: var(--primary); letter-spacing: -1px; } /* Titolo principale */
+header p { font-size: 0.9rem; color: var(--text-muted); margin: 4px 0 0 0; } /* Sottotitolo */
 
-.input-section { display: grid; gap: 18px; }
-.input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.input-group { display: flex; flex-direction: column; }
+/* Layout a griglia per la sezione input */
+.input-section { display: grid; gap: 18px; } /* Griglia con spaziatura di 18px */
+.input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; } /* Riga con due colonne uguali */
+.input-group { display: flex; flex-direction: column; } /* Gruppo input in colonna */
 
+/* Stili per le etichette dei campi input */
 label { 
-    font-size: 0.7rem; font-weight: 800; margin-bottom: 6px; 
-    color: var(--text-muted); text-transform: uppercase; 
+    font-size: 0.7rem; font-weight: 800; margin-bottom: 6px; /* Dimensione, peso e margine */
+    color: var(--text-muted); text-transform: uppercase;     /* Colore e trasformazione in maiuscolo */
 }
 
+/* Stili per i campi input */
 input { 
-    width: 100%; padding: 14px; border: 1.5px solid var(--border); 
-    border-radius: 12px; font-size: 16px; box-sizing: border-box; background: #f8fafc;
+    width: 100%; padding: 14px; border: 1.5px solid var(--border); /* Larghezza, padding e bordo */
+    border-radius: 12px; font-size: 16px; box-sizing: border-box; background: #f8fafc; /* Bordi arrotondati, dimensione font e sfondo */
 }
 
+/* Stili per il pulsante di calcolo */
 .btn-calculate { 
-    width: 100%; padding: 16px; background: var(--primary); color: white; 
-    border: none; border-radius: 14px; font-size: 1rem; font-weight: 700; cursor: pointer;
+    width: 100%; padding: 16px; background: var(--primary); color: white; /* Larghezza, padding, sfondo e colore testo */
+    border: none; border-radius: 14px; font-size: 1rem; font-weight: 700; cursor: pointer; /* Bordo, angoli, font e cursore */
 }
 
+/* Layout a griglia per i risultati principali */
 .results-main { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; }
 
+/* Stili per le card dei risultati */
 .card-res { 
-    background: #f8fafc; padding: 18px; border-radius: 18px; 
-    text-align: center; border: 1px solid var(--border); 
+    background: #f8fafc; padding: 18px; border-radius: 18px; /* Sfondo, padding e angoli arrotondati */
+    text-align: center; border: 1px solid var(--border);     /* Allineamento centrato e bordo */
 }
 
-.card-res label { font-size: 0.65rem; display: block; margin-bottom: 8px; }
-.card-res span { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
+/* Stili per etichette e valori nelle card risultato */
+.card-res label { font-size: 0.65rem; display: block; margin-bottom: 8px; } /* Etichetta piccola */
+.card-res span { font-size: 1.5rem; font-weight: 800; color: var(--primary); } /* Valore grande e colorato */
 
-.simulation-section { margin-top: 35px; }
-.simulation-section h3 { font-size: 1rem; margin-bottom: 15px; font-weight: 700; }
+/* Stili per la sezione simulazione */
+.simulation-section { margin-top: 35px; } /* Margine superiore per separazione */
+.simulation-section h3 { font-size: 1rem; margin-bottom: 15px; font-weight: 700; } /* Titolo della simulazione */
 
+/* Layout a griglia per le card della simulazione */
 .sim-card {
-    display: grid; grid-template-columns: auto 1fr auto;
-    align-items: center; gap: 15px;
-    background: #fff; border: 1px solid var(--border);
-    border-radius: 16px; padding: 16px; margin-bottom: 12px;
+    display: grid; grid-template-columns: auto 1fr auto; /* Tre colonne: icona, contenuto, valori */
+    align-items: center; gap: 15px;                      /* Allineamento centrato e spaziatura */
+    background: #fff; border: 1px solid var(--border);  /* Sfondo bianco e bordo */
+    border-radius: 16px; padding: 16px; margin-bottom: 12px; /* Angoli, padding e margine */
 }
 
+/* Cerchio con il numero dell'anno */
 .year-circle {
-    width: 38px; height: 38px; background: var(--primary);
-    color: white; border-radius: 12px;
-    display: flex; align-items: center; justify-content: center; font-weight: 800;
+    width: 38px; height: 38px; background: var(--primary); /* Dimensioni e colore di sfondo */
+    color: white; border-radius: 12px;                     /* Colore testo e angoli arrotondati */
+    display: flex; align-items: center; justify-content: center; font-weight: 800; /* Layout flex centrato e peso font */
 }
 
-.demand-info { display: flex; flex-direction: column; }
-.demand-info b { font-size: 1rem; }
+/* Container per le informazioni della domanda */
+.demand-info { display: flex; flex-direction: column; } /* Layout flex in colonna */
+.demand-info b { font-size: 1rem; } /* Testo in grassetto per la domanda */
 
+/* Stili per i tag di variazione percentuale */
 .tag { 
-    font-size: 0.65rem; font-weight: 700; padding: 2px 6px; 
-    border-radius: 6px; width: fit-content; margin-top: 3px; 
+    font-size: 0.65rem; font-weight: 700; padding: 2px 6px; /* Dimensione font, peso e padding */
+    border-radius: 6px; width: fit-content; margin-top: 3px; /* Angoli arrotondati e margine */
 }
 
-.growth { background: #dcfce7; color: var(--success); }
-.decline { background: #fee2e2; color: var(--danger); }
-.base-tag { background: #f1f5f9; color: var(--text-muted); }
+/* Classi per i colori dei tag in base al tipo di variazione */
+.growth { background: #dcfce7; color: var(--success); }  /* Verde per crescita */
+.decline { background: #fee2e2; color: var(--danger); }  /* Rosso per declino */
+.base-tag { background: #f1f5f9; color: var(--text-muted); } /* Grigio per valore base */
 
+/* Blocco per i valori di costo con separatore visivo */
 .cost-block { 
-    display: flex; flex-direction: column; align-items: flex-end; 
-    border-left: 1px solid var(--border); padding-left: 15px; 
+    display: flex; flex-direction: column; align-items: flex-end; /* Layout flex in colonna allineato a destra */
+    border-left: 1px solid var(--border); padding-left: 15px;    /* Bordo sinistro e padding */
 }
 
+/* Etichette piccole per i valori */
 .mini-label { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
-.eoq-small { font-weight: 800; color: var(--primary); font-size: 1rem; }
-.cost-small { font-size: 0.85rem; font-weight: 700; margin-top: 4px; }
+.eoq-small { font-weight: 800; color: var(--primary); font-size: 1rem; } /* Valore EOQ evidenziato */
+.cost-small { font-size: 0.85rem; font-weight: 700; margin-top: 4px; }   /* Valore del costo */
 
+/* Badge per le unità di misura */
 .unit-badge { 
-    background: #f8fafc; color: var(--text-muted); padding: 2px 8px; 
-    border-radius: 20px; font-size: 0.65rem; font-weight: 700; 
-    margin-top: 4px; border: 1px solid var(--border); 
+    background: #f8fafc; color: var(--text-muted); padding: 2px 8px; /* Sfondo, colore e padding */
+    border-radius: 20px; font-size: 0.65rem; font-weight: 700;      /* Forma arrotondata e font */
+    margin-top: 4px; border: 1px solid var(--border);               /* Margine e bordo */
 }
 
+/* Classe utility per nascondere elementi */
 .hidden { display: none; }
