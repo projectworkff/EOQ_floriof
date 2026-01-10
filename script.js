@@ -73,7 +73,7 @@ function calcola() {
         alert(translations[lang].errorD);
         return;
     }
-    if (isNaN(S) || S < 0 || isNaN(H) || H <= 0 || isNaN(L) || L < 0) {
+    if (isNaN(S) || S < 0 || isNaN(H) || H <= 0 || isNaN(L) || L < 0 || isNaN(sigma) || sigma < 0) {
         document.getElementById('resultsArea').classList.add('hidden'); // Nasconde l'area risultati
         alert(translations[lang].errorParams);
         return;
