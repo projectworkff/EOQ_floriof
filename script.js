@@ -2,27 +2,33 @@
 const translations = {
     // Traduzioni in italiano - lingua predefinita
     it: {
-        title: "Analizzatore EOQ/ROP", subtitle: "Ottimizzazione Scorte", // Titolo e sottotitolo principale
-        labelD: "Domanda Annua", labelS: "Costo Setup", labelH: "Costo Gestione", // Etichette per i campi input
-        labelL: "Lead Time (gg)", labelSigma: "Varianza (σ)", btn: "CALCOLA RISULTATI", // Altri campi e pulsante
-        resEOQ: "Lotto Ottimale", resROP: "Punto Riordino", simTitle: "Simulazione Triennale", // Risultati e simulazione
-        base: "Base", eoqLabel: "Lotto", unitLabel: "Unitario:" // Etichette per la simulazione
+        title: "Analizzatore EOQ/ROP", subtitle: "Ottimizzazione Scorte",
+        labelD: "Domanda Annua", labelS: "Costo Setup", labelH: "Costo Gestione",
+        labelL: "Lead Time (gg)", labelSigma: "Varianza (σ)", btn: "CALCOLA RISULTATI",
+        resEOQ: "Lotto Ottimale", resROP: "Punto Riordino", simTitle: "Simulazione Triennale",
+        base: "Base", eoqLabel: "Lotto", unitLabel: "Unitario:",
+        errorD: "Inserire una domanda annua valida (maggiore di 0)",
+        errorParams: "Assicurati che tutti i costi e i tempi siano positivi"
     },
     // Traduzioni in inglese
     en: {
-        title: "EOQ/ROP Optimizer", subtitle: "Inventory Management", // Titolo e sottotitolo in inglese
-        labelD: "Annual Demand", labelS: "Setup Cost", labelH: "Holding Cost", // Campi input in inglese
-        labelL: "Lead Time (days)", labelSigma: "Variance (σ)", btn: "CALCULATE RESULTS", // Altri campi in inglese
-        resEOQ: "Optimal Lot", resROP: "Reorder Point", simTitle: "3-Year Simulation", // Risultati in inglese
-        base: "Base", eoqLabel: "Lot", unitLabel: "Unit:" // Etichette simulazione in inglese
+        title: "EOQ/ROP Optimizer", subtitle: "Inventory Management",
+        labelD: "Annual Demand", labelS: "Setup Cost", labelH: "Holding Cost",
+        labelL: "Lead Time (days)", labelSigma: "Variance (σ)", btn: "CALCULATE RESULTS",
+        resEOQ: "Optimal Lot", resROP: "Reorder Point", simTitle: "3-Year Simulation",
+        base: "Base", eoqLabel: "Lot", unitLabel: "Unit:",
+        errorD: "Please enter a valid annual demand (greater than 0)",
+        errorParams: "Ensure all costs and times are positive"
     },
     // Traduzioni in spagnolo
     es: {
-        title: "Optimizador EOQ/ROP", subtitle: "Gestión de Stock", // Titolo e sottotitolo in spagnolo
-        labelD: "Demanda Anual", labelS: "Coste Pedido", labelH: "Coste Almacén", // Campi input in spagnolo
-        labelL: "Plazo Entrega (d)", labelSigma: "Varianza (σ)", btn: "CALCULAR RESULTADOS", // Altri campi in spagnolo
-        resEOQ: "Lote Óptimo", resROP: "Punto de Pedido", simTitle: "Simulación 3 Años", // Risultati in spagnolo
-        base: "Base", eoqLabel: "Lote", unitLabel: "Unitario:" // Etichette simulazione in spagnolo
+        title: "Optimizador EOQ/ROP", subtitle: "Gestión de Stock",
+        labelD: "Demanda Anual", labelS: "Coste Pedido", labelH: "Coste Almacén",
+        labelL: "Plazo Entrega (d)", labelSigma: "Varianza (σ)", btn: "CALCULAR RESULTADOS",
+        resEOQ: "Lote Óptimo", resROP: "Punto de Pedido", simTitle: "Simulación 3 Años",
+        base: "Base", eoqLabel: "Lote", unitLabel: "Unitario:",
+        errorD: "Ingrese una demanda anual válida (mayor a 0)",
+        errorParams: "Asegúrese de che todos los costos y tiempos sean positivos"
     }
 };
 
@@ -61,6 +67,16 @@ function calcola() {
     const sigma = parseFloat(document.getElementById('sigma').value); // Deviazione standard della domanda
     const lang = document.getElementById('languagePicker').value; // Lingua corrente per le traduzioni
     
+    // VALIDAZIONE INPUT 
+    if (isNaN(D) || D <= 0) {
+        alert(translations[lang].errorD);
+        return;
+    }
+    if (isNaN(S) || S < 0 || isNaN(H) || H <= 0 || isNaN(L) || L < 0) {
+        alert(translations[lang].errorParams);
+        return;
+    }
+
     const Z = 1.645; // Fattore Z per il 95% di livello di servizio (distribuzione normale)
     
     // Calcolo delle formule principali per la gestione delle scorte
