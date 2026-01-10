@@ -70,10 +70,12 @@ function calcola() {
     // VALIDAZIONE INPUT 
     if (isNaN(D) || D <= 0) {
         alert(translations[lang].errorD);
+        document.getElementById('resultsArea').classList.add('hidden'); // Nasconde l'area risultati
         return;
     }
     if (isNaN(S) || S < 0 || isNaN(H) || H <= 0 || isNaN(L) || L < 0) {
         alert(translations[lang].errorParams);
+        document.getElementById('resultsArea').classList.add('hidden'); // Nasconde l'area risultati
         return;
     }
 
