@@ -96,15 +96,15 @@ function calcola() {
     simContainer.innerHTML = ''; // Pulisce il contenuto precedente
     
     // Array con i fattori di variazione per i tre anni: base, +25%, -20%
-    const variazioni = [1, 1.25, 0.80];
-
+    const variazioni = [1, 0.80, 1.25]; // Anno 1: Base, Anno 2: Calo, Anno 3: Recupero/Picco
+    
     // Genera una card per ogni anno della simulazione
     variazioni.forEach((v, i) => {
         // Calcola i valori per l'anno corrente
-        let curD = D * v;                                    // Domanda per l'anno corrente
-        let curEOQ = Math.sqrt((2 * curD * S) / H);         // EOQ per la domanda corrente
+        let curD = D * v;                                     // Domanda per l'anno corrente
+        let curEOQ = Math.sqrt((2 * curD * S) / H);           // EOQ per la domanda corrente
         let curCost = (curD / curEOQ * S) + (curEOQ / 2 * H); // Costo totale: costo ordini + costo mantenimento
-        let unitCost = curCost / curD;                       // Costo unitario per unità
+        let unitCost = curCost / curD;                        // Costo unitario per unità
         
         // Calcola la percentuale di variazione rispetto al valore base
         let perc = Math.round((v - 1) * 100);
